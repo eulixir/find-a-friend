@@ -14,6 +14,9 @@ dependencies:
   bcryptjs:
     specifier: 2.4.3
     version: 2.4.3
+  bson:
+    specifier: ^6.1.0
+    version: 6.1.0
   dayjs:
     specifier: 1.11.9
     version: 1.11.9
@@ -1003,6 +1006,11 @@ packages:
     dependencies:
       fill-range: 7.0.1
     dev: true
+
+  /bson@6.1.0:
+    resolution: {integrity: sha512-yiQ3KxvpVoRpx1oD1uPz4Jit9tAVTJgjdmjDKtUErkOoL9VNoF8Dd58qtAOL5E40exx2jvAT9sqdRSK/r+SHlA==}
+    engines: {node: '>=16.20.1'}
+    dev: false
 
   /buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}

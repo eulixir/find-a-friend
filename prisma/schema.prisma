@@ -1,47 +1,59 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id            String    @id @default(uuid())
-  name          String
-  email         String    @unique
-  password_hash String
-  created_at    DateTime  @default(now())
-  CheckIn       CheckIn[]
-
-  @@map("users")
+enum Species {
+  DOG
+  CAT
+  BIRD
+  SNAKE
+  FOX
 }
 
-model CheckIn {
-  id           String    @id @default(uuid())
-  created_at   DateTime  @default(now())
-  validated_at DateTime?
+model Pet {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  name       String?
+  species    Species
+  breed      String
+  orgId      String   @map("org_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  customerId String?  @map("customer_id")
 
-  user    User   @relation(fields: [user_id], references: [id])
-  gym     Gym    @relation(fields: [gym_id], references: [id])
-  user_id String
-  gym_id  String
-
-  @@map("check_ins")
+  @@map("pets")
 }
 
-model Gym {
-  id          String    @id @default(uuid())
-  title       String
-  description String?
-  phone       String?
-  latitude    Decimal
-  longitude   Decimal
-  CheckIn     CheckIn[]
+model Org {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String   @unique
+  phoneNumber String   @map("phone_number")
+  createdAt   DateTime @default(now()) @map("created_at")
+  addressId   String   @map("address_id")
 
-  @@map("gyms")
+  @@map("orgs")
+}
+
+model Address {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  zipCode      String @map("zip_code")
+  state        String
+  city         String
+  neighborhood String
+  street       String
+  orgId        String @map("org_id")
+  customerId   String
+}
+
+model Customer {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("customers")
 }
