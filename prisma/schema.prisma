@@ -39,14 +39,18 @@ model Org {
 }
 
 model Address {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
-  zipCode      String @map("zip_code")
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  country      String
+  zipCode      String  @map("zip_code")
   state        String
   city         String
   neighborhood String
   street       String
-  orgId        String @map("org_id")
-  customerId   String
+  number       String?
+  complement   String?
+
+  orgId      String? @map("org_id")
+  customerId String? @map("customer_id")
 }
 
 model Customer {
