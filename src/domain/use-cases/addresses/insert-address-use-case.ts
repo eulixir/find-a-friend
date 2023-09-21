@@ -1,7 +1,7 @@
 import { Address } from '@prisma/client'
 import { AddressesRepository } from '@/domain/repositories/addressess-repository'
 
-interface RegisterAddressUseCaseRequest {
+interface InsertAddressUseCaseRequest {
   id?: string
   country: string
   zipCode: string
@@ -15,16 +15,16 @@ interface RegisterAddressUseCaseRequest {
   customerId?: string
 }
 
-interface RegisterAddressUseCaseResponse {
+interface InsertAddressUseCaseResponse {
   address: Address
 }
 
-export class RegisterAddressUseCase {
+export class InsertAddressUseCase {
   constructor(private addressesRepository: AddressesRepository) {}
 
   async execute(
-    props: RegisterAddressUseCaseRequest,
-  ): Promise<RegisterAddressUseCaseResponse> {
+    props: InsertAddressUseCaseRequest,
+  ): Promise<InsertAddressUseCaseResponse> {
     const address = await this.addressesRepository.create(props)
 
     return { address }

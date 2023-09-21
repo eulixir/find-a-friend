@@ -1,7 +1,7 @@
 import { OrgAlredyExistsError } from '@/domain/use-cases/errors/orgAlreadyExists'
 import { OrgsRepository } from '@/domain/repositories/orgs-repository'
 import { Org } from '@prisma/client'
-import { RegisterAddressUseCase } from '../addresses/register-address-use-case'
+import { InsertAddressUseCase } from '../addresses/insert-address-use-case'
 import { AddressesRepository } from '@/domain/repositories/addressess-repository'
 import { ObjectId } from 'bson'
 
@@ -46,9 +46,9 @@ export class RegisterOrgUseCase {
     const orgId = new ObjectId().toString()
     const addressId = new ObjectId().toString()
 
-    const registerAddress = new RegisterAddressUseCase(this.addressRepository)
+    const newAddress = new InsertAddressUseCase(this.addressRepository)
 
-    await registerAddress.execute({ id: addressId, orgId, ...address })
+    await newAddress.execute({ id: addressId, orgId, ...address })
 
     if (orgWithEmail) {
       throw new OrgAlredyExistsError()
