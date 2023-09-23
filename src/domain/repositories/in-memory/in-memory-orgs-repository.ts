@@ -7,10 +7,10 @@ export class InMemoryOrgsRepository implements OrgsRepository {
 
   async create(data: Prisma.OrgCreateInput) {
     const org = {
-      id: new ObjectId().toString(),
+      id: data.id ?? new ObjectId().toString(),
       name: data.name,
       email: data.email,
-      addressId: data.addressId,
+      orgAddressId: data.orgAddressId,
       phoneNumber: data.phoneNumber,
 
       createdAt: new Date(),
@@ -29,5 +29,11 @@ export class InMemoryOrgsRepository implements OrgsRepository {
     }
 
     return org
+  }
+
+  async findManyByIds(ids: string[]) {
+    const orgs = this.items.filter((org) => ids.includes(org.id))
+
+    return orgs
   }
 }

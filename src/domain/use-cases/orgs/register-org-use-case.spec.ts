@@ -2,17 +2,17 @@ import { expect, describe, it, beforeEach } from 'vitest'
 import { RegisterOrgUseCase } from './register-org-use-case'
 import { InMemoryOrgsRepository } from '@/domain/repositories/in-memory/in-memory-orgs-repository'
 import { OrgAlredyExistsError } from '@/domain/use-cases/errors/orgAlreadyExists'
-import { InMemoryAddressesRepository } from '@/domain/repositories/in-memory/in-memory-addresses-reposiory'
+import { InMemoryOrgsAddressesRepository } from '@/domain/repositories/in-memory/in-memory-orgs-addresses-repository'
 
 let orgsRepository: InMemoryOrgsRepository
-let addressRepository: InMemoryAddressesRepository
+let orgsAddressRepository: InMemoryOrgsAddressesRepository
 let sut: RegisterOrgUseCase
 
 describe('Register Org Use Case', () => {
   beforeEach(() => {
     orgsRepository = new InMemoryOrgsRepository()
-    addressRepository = new InMemoryAddressesRepository()
-    sut = new RegisterOrgUseCase(orgsRepository, addressRepository)
+    orgsAddressRepository = new InMemoryOrgsAddressesRepository()
+    sut = new RegisterOrgUseCase(orgsRepository, orgsAddressRepository)
   })
 
   it('should to register a org', async () => {
@@ -23,6 +23,7 @@ describe('Register Org Use Case', () => {
       state: 'Federal District',
       street: 'Rua das bananas',
       zipCode: '7300000',
+      orgId: 'org-01',
     }
 
     const { org } = await sut.execute({
@@ -46,10 +47,10 @@ describe('Register Org Use Case', () => {
     }
 
     const data = {
-      addressId: '01',
       email: 'email@email.com',
       name: 'Luiza Honey',
       phoneNumber: '4002-8922',
+
       address,
     }
 

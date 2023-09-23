@@ -1,5 +1,5 @@
-import { Address } from '@prisma/client'
-import { AddressesRepository } from '@/domain/repositories/addressess-repository'
+import { OrgAddress } from '@prisma/client'
+import { OrgsAddressesRepository } from '@/domain/repositories/orgs-addressess-repository'
 
 interface InsertAddressUseCaseRequest {
   id?: string
@@ -11,21 +11,20 @@ interface InsertAddressUseCaseRequest {
   street: string
   number?: string
   complement?: string
-  orgId?: string
-  customerId?: string
+  orgId: string
 }
 
 interface InsertAddressUseCaseResponse {
-  address: Address
+  address: OrgAddress
 }
 
 export class InsertAddressUseCase {
-  constructor(private addressesRepository: AddressesRepository) {}
+  constructor(private orgsAddressesRepository: OrgsAddressesRepository) {}
 
   async execute(
     props: InsertAddressUseCaseRequest,
   ): Promise<InsertAddressUseCaseResponse> {
-    const address = await this.addressesRepository.create(props)
+    const address = await this.orgsAddressesRepository.create(props)
 
     return { address }
   }

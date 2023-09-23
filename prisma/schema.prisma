@@ -28,17 +28,17 @@ model Pet {
 }
 
 model Org {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  email       String   @unique
-  phoneNumber String   @map("phone_number")
-  createdAt   DateTime @default(now()) @map("created_at")
-  addressId   String   @map("address_id")
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  email        String   @unique
+  phoneNumber  String   @map("phone_number")
+  createdAt    DateTime @default(now()) @map("created_at")
+  orgAddressId String   @map("org_address_id")
 
   @@map("orgs")
 }
 
-model Address {
+model OrgAddress {
   id           String  @id @default(auto()) @map("_id") @db.ObjectId
   country      String
   zipCode      String  @map("zip_code")
@@ -48,9 +48,7 @@ model Address {
   street       String
   number       String?
   complement   String?
-
-  orgId      String? @map("org_id")
-  customerId String? @map("customer_id")
+  orgId        String  @map("org_id") @db.ObjectId
 }
 
 model Customer {

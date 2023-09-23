@@ -1,13 +1,13 @@
 import { expect, describe, it, beforeEach } from 'vitest'
 import { InsertAddressUseCase } from './insert-address-use-case'
-import { InMemoryAddressesRepository } from '@/domain/repositories/in-memory/in-memory-addresses-reposiory'
+import { InMemoryOrgsAddressesRepository } from '@/domain/repositories/in-memory/in-memory-orgs-addresses-repository'
 
-let addressRepository: InMemoryAddressesRepository
+let addressRepository: InMemoryOrgsAddressesRepository
 let sut: InsertAddressUseCase
 
 describe('Insert Address Use Case', () => {
   beforeEach(() => {
-    addressRepository = new InMemoryAddressesRepository()
+    addressRepository = new InMemoryOrgsAddressesRepository()
     sut = new InsertAddressUseCase(addressRepository)
   })
 
@@ -19,6 +19,7 @@ describe('Insert Address Use Case', () => {
       state: 'Federal District',
       street: 'Rua das bananas',
       zipCode: '7300000',
+      orgId: 'org-id',
     })
 
     expect(address.id).toEqual(expect.any(String))
