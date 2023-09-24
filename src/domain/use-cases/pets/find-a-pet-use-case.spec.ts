@@ -87,10 +87,10 @@ describe('Find a Pet Use Case', () => {
         age: 1,
       },
       {
-        breed: 'Nine tails',
+        breed: 'Arara',
         orgId,
-        species: Species.FOX,
-        name: 'Kyuubi',
+        species: Species.BIRD,
+        name: 'Blu',
         age: 3,
       },
     ]
@@ -161,13 +161,6 @@ describe('Find a Pet Use Case', () => {
         species: Species.CAT,
         name: 'Zinga',
         age: 1,
-      },
-      {
-        breed: 'Nine tails',
-        orgId: orgId1,
-        species: Species.FOX,
-        name: 'Kyuubi',
-        age: 3,
       },
     ]
 

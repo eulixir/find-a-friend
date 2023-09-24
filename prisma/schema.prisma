@@ -12,7 +12,6 @@ enum Species {
   CAT
   BIRD
   SNAKE
-  FOX
 }
 
 model Pet {
