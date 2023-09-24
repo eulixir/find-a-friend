@@ -21,6 +21,7 @@ model Pet {
   species    Species
   breed      String
   orgId      String   @map("org_id")
+  age        Int
   createdAt  DateTime @default(now()) @map("created_at")
   customerId String?  @map("customer_id")
 

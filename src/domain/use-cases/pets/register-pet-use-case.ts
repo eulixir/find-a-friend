@@ -6,6 +6,7 @@ interface RegisterPetUseCaseRequest {
   species: Species
   breed: string
   orgId: string
+  age: number
 }
 
 interface RegisterPetUseCaseResponse {

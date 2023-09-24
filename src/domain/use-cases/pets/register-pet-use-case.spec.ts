@@ -16,6 +16,7 @@ describe('Register Use Case', () => {
     const { pet } = await sut.execute({
       breed: 'German Shepherd',
       orgId: 'org-01',
+      age: 5,
       species: Species.DOG,
       name: 'Zinga',
     })

@@ -1,33 +1,46 @@
-// import { OrgsRepository } from '@/domain/repositories/orgs-repository'
+import { Pet, Species } from '@prisma/client'
+import { FindNearbyOrgsUseCase } from '../addresses/find-nearby-orgs-use-case'
+import { PetsRepository } from '@/domain/repositories/pets-repository'
 
-// import { Pet, Species } from '@prisma/client'
+interface Filters {
+  specie: Species
+  age: number
+  breed: string
+}
 
-// interface Filters {
-//   specie: Species
-//   age: number
-//   breed: string
-// }
+interface FindAPetUseCaseRequest {
+  city: string
+  filters: Filters
+}
 
-// interface FindAPetUseCaseRequest {
-//   city: string
-//   filters: Filters
-// }
+interface FindAPetUseCaseResponse {
+  pets: Pet[]
+}
 
-// interface FindAPetUseCaseResponse {
-//   pet: Pet
-// }
+export class FindAPetUseCase {
+  constructor(
+    private petsRepository: PetsRepository,
+    private findNearbyOrgsUseCase: FindNearbyOrgsUseCase,
+  ) {}
 
-// export class FindAPetUseCase {
-//   constructor(private orgsRepository: OrgsRepository) {}
+  async execute({
+    city,
+    filters,
+  }: FindAPetUseCaseRequest): Promise<FindAPetUseCaseResponse> {
+    const { orgs } = await this.findNearbyOrgsUseCase.execute({ city })
 
-//   async execute({
-//     city,
-//     filters,
-//   }: FindAPetUseCaseRequest): Promise<FindAPetUseCaseResponse> {
-//     // listar organizações com a cidade igual a do input
+    const orgsId = orgs.map((org) => org.id)
 
-//     const orgs = await this.orgsRepository.filterOrgByAddress(city)
+    const nearbyPets = await this.petsRepository.findManyByOrgsIds(orgsId)
 
-//     return { pet }
-//   }
-// }
+    const pets = await this.#filterPets(nearbyPets, filters)
+
+    return { pets }
+  }
+
+  async #filterPets(pets: Pet[], filters: Filters) {
+    return pets.filter(
+      (pet) => pet.species === filters.specie && pet.age <= filters.age,
+    )
+  }
+}

@@ -2,15 +2,8 @@ import { OrgsAddressesRepository } from '@/domain/repositories/orgs-addressess-r
 import { OrgsRepository } from '@/domain/repositories/orgs-repository'
 import { Org } from '@prisma/client'
 
-// interface Filters {
-//   specie: Species
-//   age: number
-//   breed: string
-// }
-
 interface FindNearbyOrgsUseCaseRequest {
   city: string
-  // filters: Filters
 }
 
 interface FindNearbyOrgsUseCaseResponse {

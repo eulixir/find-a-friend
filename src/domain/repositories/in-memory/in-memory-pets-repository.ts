@@ -12,6 +12,7 @@ export class InMemoryPetsRepository implements PetsRepository {
       name: data.name ?? null,
       breed: data.breed,
       orgId: data.orgId,
+      age: data.age,
       customerId: data.customerId ?? null,
       species: data.species,
       createdAt: new Date(),
@@ -20,5 +21,10 @@ export class InMemoryPetsRepository implements PetsRepository {
     this.items.push(pet)
 
     return pet
+  }
+
+  async findManyByOrgsIds(ids: string[]) {
+    const pets = this.items.filter((pet) => ids.includes(pet.orgId))
+    return pets
   }
 }
