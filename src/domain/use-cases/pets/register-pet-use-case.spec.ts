@@ -10,7 +10,7 @@ let sut: RegisterPetUseCase
 describe('Register Use Case', () => {
   beforeEach(() => {
     petsRepository = new InMemoryPetsRepository()
-    petsFactory = new PetsFactory()
+    petsFactory = new PetsFactory(petsRepository)
     sut = new RegisterPetUseCase(petsRepository)
   })
 

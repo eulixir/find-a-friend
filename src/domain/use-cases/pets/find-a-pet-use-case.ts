@@ -40,7 +40,10 @@ export class FindAPetUseCase {
 
   async #filterPets(pets: Pet[], filters: Filters) {
     return pets.filter(
-      (pet) => pet.species === filters.specie && pet.age <= filters.age,
+      (pet) =>
+        pet.species === filters.specie &&
+        pet.age <= filters.age &&
+        pet.breed === filters.breed,
     )
   }
 }

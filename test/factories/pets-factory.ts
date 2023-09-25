@@ -1,3 +1,5 @@
+import { PetsRepository } from '@/domain/repositories/pets-repository'
+import { RegisterPetUseCase } from '@/domain/use-cases/pets/register-pet-use-case'
 import { faker } from '@faker-js/faker'
 import { Species } from '@prisma/client'
 import { randomInt, randomUUID } from 'crypto'
@@ -11,6 +13,17 @@ interface PetProps {
 }
 
 export class PetsFactory {
+  constructor(private petsRepositoru: PetsRepository) {}
+
+  async insert(props: PetProps) {
+    const registerPetUseCase = new RegisterPetUseCase(this.petsRepositoru)
+    const petParams = await this.getProps(props)
+
+    const { pet } = await registerPetUseCase.execute(petParams)
+
+    return pet
+  }
+
   async getProps(props: PetProps) {
     const { breed, name, species } = this.#generateSpecs(props)
 
@@ -23,6 +36,12 @@ export class PetsFactory {
     }
   }
 
+  async insertMany(props: PetProps, loops: number) {
+    for (let i = 0; i < loops; i++) {
+      this.insert(props)
+    }
+  }
+
   #generateSpecs(props: PetProps) {
     const possibleSpecies = [
       Species.BIRD,
@@ -32,42 +51,41 @@ export class PetsFactory {
     ]
 
     const specie =
-      possibleSpecies[
-        Math.floor(Math.random() * possibleSpecies.length)
-      ].toLowerCase()
+      props.species ??
+      possibleSpecies[Math.floor(Math.random() * possibleSpecies.length)]
 
-    switch (specie) {
+    switch (specie.toLowerCase()) {
       case 'cat':
         return {
           name: props.name ?? faker.animal.cat.name,
-          species: Species.CAT,
+          species: specie,
           breed: props.breed ?? faker.animal.cat(),
         }
 
       case 'dog':
         return {
           name: props.name ?? faker.animal.dog.name,
-          species: Species.DOG,
+          species: specie,
           breed: props.breed ?? faker.animal.dog(),
         }
 
       case 'bird':
         return {
           name: props.name ?? faker.animal.bird.name,
-          species: Species.BIRD,
+          species: specie,
           breed: props.breed ?? faker.animal.bird(),
         }
 
       case 'snake':
         return {
           name: props.name ?? faker.animal.snake.name,
-          species: Species.SNAKE,
+          species: specie,
           breed: props.breed ?? faker.animal.snake(),
         }
       default:
         return {
           name: props.name ?? faker.animal.snake.name,
-          species: Species.SNAKE,
+          species: specie,
           breed: props.breed ?? faker.animal.snake(),
         }
     }

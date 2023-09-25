@@ -25,6 +25,7 @@ export class InMemoryPetsRepository implements PetsRepository {
 
   async findManyByOrgsIds(ids: string[]) {
     const pets = this.items.filter((pet) => ids.includes(pet.orgId))
+
     return pets
   }
 }

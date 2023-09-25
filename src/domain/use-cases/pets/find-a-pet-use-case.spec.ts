@@ -1,20 +1,15 @@
 import { expect, describe, it, beforeEach } from 'vitest'
-import { RegisterPetUseCase } from './register-pet-use-case'
 import { Species } from '@prisma/client'
 import { InMemoryPetsRepository } from '@/domain/repositories/in-memory/in-memory-pets-repository'
 import { FindAPetUseCase } from './find-a-pet-use-case'
 import { FindNearbyOrgsUseCase } from '../addresses/find-nearby-orgs-use-case'
 import { InMemoryOrgsAddressesRepository } from '@/domain/repositories/in-memory/in-memory-orgs-addresses-repository'
 import { InMemoryOrgsRepository } from '@/domain/repositories/in-memory/in-memory-orgs-repository'
-import { RegisterOrgUseCase } from '../orgs/register-org-use-case'
-import { randomUUID } from 'crypto'
 import { OrgsFactory } from 'test/factories/orgs-factory'
 import { PetsFactory } from 'test/factories/pets-factory'
 
 let petsRepository: InMemoryPetsRepository
-let registerPet: RegisterPetUseCase
 let findNearbyOrgs: FindNearbyOrgsUseCase
-let registerOrgUseCase: RegisterOrgUseCase
 let orgsRepository: InMemoryOrgsRepository
 let petsFactory: PetsFactory
 let orgsAddressRepository: InMemoryOrgsAddressesRepository
@@ -25,11 +20,10 @@ let sut: FindAPetUseCase
 describe('Find a Pet Use Case', () => {
   beforeEach(() => {
     petsRepository = new InMemoryPetsRepository()
-    registerPet = new RegisterPetUseCase(petsRepository)
     orgsRepository = new InMemoryOrgsRepository()
     orgsAddressRepository = new InMemoryOrgsAddressesRepository()
     orgsFactory = new OrgsFactory(orgsRepository, orgsAddressRepository)
-    petsFactory = new PetsFactory()
+    petsFactory = new PetsFactory(petsRepository)
     findNearbyOrgs = new FindNearbyOrgsUseCase(
       orgsAddressRepository,
       orgsRepository,
@@ -44,6 +38,15 @@ describe('Find a Pet Use Case', () => {
       address: { city: 'Brasilia' },
     })
 
+    await petsFactory.insertMany({ orgId }, 20)
+
+    await petsFactory.insert({
+      age: 9,
+      orgId,
+      breed: 'German Shepherd',
+      species: Species.DOG,
+    })
+
     const filters = { age: 9, breed: 'German Shepherd', specie: Species.DOG }
     const nearbyPets = await sut.execute({
       city: 'Brasilia',
@@ -54,64 +57,31 @@ describe('Find a Pet Use Case', () => {
   })
 
   it('should be able to list pets from two distincts orgs', async () => {
-    const cities = [
-      'Brasilia',
-      'Brasilia',
-      'Aguas Claras',
-      'Taguatinga',
-      'Planaltina',
-      'Gama',
-      'Guara',
-    ]
+    await orgsFactory.insertMany({}, 20)
 
-    for (const city of cities) {
-      await registerOrgUseCase.execute({
-        email: `email@${randomUUID()}.com`,
-        name: 'Luiza Honey',
-        phoneNumber: '4002-8922',
-        address: {
-          city,
-          country: 'Brazil',
-          neighborhood: 'Quadra 3',
-          state: 'Federal District',
-          street: 'Rua das bananas',
-          zipCode: '7300000',
-        },
-      })
-    }
+    const { id: orgId } = await orgsFactory.insert({
+      address: { city: 'Brasilia' },
+    })
 
-    const orgs = orgsRepository.items
+    const { id: orgId2 } = await orgsFactory.insert({
+      address: { city: 'Brasilia' },
+    })
 
-    const { id: orgId1 } = orgs[0]
-    const { id: orgId2 } = orgs[1]
+    await petsFactory.insertMany({ orgId }, 20)
 
-    const pets = [
-      {
-        breed: 'German Shepherd',
-        orgId: orgId1,
-        species: Species.DOG,
-        name: 'Zinga',
-        age: 9,
-      },
-      {
-        breed: 'German Shepherd',
-        orgId: orgId2,
-        species: Species.DOG,
-        name: 'Zinga',
-        age: 9,
-      },
-      {
-        breed: 'Japanese Bobtail',
-        orgId: orgId1,
-        species: Species.CAT,
-        name: 'Zinga',
-        age: 1,
-      },
-    ]
+    await petsFactory.insert({
+      age: 9,
+      orgId,
+      breed: 'German Shepherd',
+      species: Species.DOG,
+    })
 
-    for (const pet of pets) {
-      await registerPet.execute(pet)
-    }
+    await petsFactory.insert({
+      age: 9,
+      orgId: orgId2,
+      breed: 'German Shepherd',
+      species: Species.DOG,
+    })
 
     const filters = { age: 9, breed: 'German Shepherd', specie: Species.DOG }
     const nearbyPets = await sut.execute({
@@ -120,5 +90,33 @@ describe('Find a Pet Use Case', () => {
     })
 
     expect(nearbyPets.pets).toHaveLength(2)
+  })
+
+  it('should not be able to list pets when in not close', async () => {
+    await orgsFactory.insertMany({}, 20)
+
+    await petsFactory.insertMany({}, 20)
+
+    const filters = { age: 9, breed: 'German Shepherd', specie: Species.DOG }
+    const nearbyPets = await sut.execute({
+      city: 'Brasilia',
+      filters,
+    })
+
+    expect(nearbyPets.pets).toHaveLength(0)
+  })
+
+  it('should not be able to list pets when filter does not match', async () => {
+    await orgsFactory.insertMany({ address: { city: 'Brasilia' } }, 20)
+
+    await orgsFactory.insert({ address: { city: 'Brasilia' } })
+
+    const filters = { age: 10, breed: 'German Shepherd', specie: Species.DOG }
+    const nearbyPets = await sut.execute({
+      city: 'Brasilia',
+      filters,
+    })
+
+    expect(nearbyPets.pets).toHaveLength(0)
   })
 })
