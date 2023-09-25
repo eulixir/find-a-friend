@@ -8,13 +8,18 @@ import { InMemoryOrgsAddressesRepository } from '@/domain/repositories/in-memory
 import { InMemoryOrgsRepository } from '@/domain/repositories/in-memory/in-memory-orgs-repository'
 import { RegisterOrgUseCase } from '../orgs/register-org-use-case'
 import { randomUUID } from 'crypto'
+import { OrgsFactory } from 'test/factories/orgs-factory'
+import { PetsFactory } from 'test/factories/pets-factory'
 
 let petsRepository: InMemoryPetsRepository
 let registerPet: RegisterPetUseCase
 let findNearbyOrgs: FindNearbyOrgsUseCase
 let registerOrgUseCase: RegisterOrgUseCase
 let orgsRepository: InMemoryOrgsRepository
+let petsFactory: PetsFactory
 let orgsAddressRepository: InMemoryOrgsAddressesRepository
+let orgsFactory: OrgsFactory
+
 let sut: FindAPetUseCase
 
 describe('Find a Pet Use Case', () => {
@@ -23,10 +28,8 @@ describe('Find a Pet Use Case', () => {
     registerPet = new RegisterPetUseCase(petsRepository)
     orgsRepository = new InMemoryOrgsRepository()
     orgsAddressRepository = new InMemoryOrgsAddressesRepository()
-    registerOrgUseCase = new RegisterOrgUseCase(
-      orgsRepository,
-      orgsAddressRepository,
-    )
+    orgsFactory = new OrgsFactory(orgsRepository, orgsAddressRepository)
+    petsFactory = new PetsFactory()
     findNearbyOrgs = new FindNearbyOrgsUseCase(
       orgsAddressRepository,
       orgsRepository,
@@ -35,69 +38,11 @@ describe('Find a Pet Use Case', () => {
   })
 
   it('should be able to find a frind when have a match with filters', async () => {
-    const cities = [
-      'Brasilia',
-      'Sobradinho',
-      'Aguas Claras',
-      'Taguatinga',
-      'Planaltina',
-      'Gama',
-      'Guara',
-    ]
+    await orgsFactory.insertMany({}, 20)
 
-    for (const city of cities) {
-      await registerOrgUseCase.execute({
-        email: `email@${randomUUID()}.com`,
-        name: 'Luiza Honey',
-        phoneNumber: '4002-8922',
-        address: {
-          city,
-          country: 'Brazil',
-          neighborhood: 'Quadra 3',
-          state: 'Federal District',
-          street: 'Rua das bananas',
-          zipCode: '7300000',
-        },
-      })
-    }
-
-    const orgs = orgsRepository.items
-
-    const { id: orgId } = orgs[0]
-
-    const pets = [
-      {
-        breed: 'German Shepherd',
-        orgId,
-        species: Species.DOG,
-        name: 'Zinga',
-        age: 9,
-      },
-      {
-        breed: 'Bengal',
-        orgId,
-        species: Species.CAT,
-        age: 0,
-      },
-      {
-        breed: 'Japanese Bobtail',
-        orgId,
-        species: Species.CAT,
-        name: 'Zinga',
-        age: 1,
-      },
-      {
-        breed: 'Arara',
-        orgId,
-        species: Species.BIRD,
-        name: 'Blu',
-        age: 3,
-      },
-    ]
-
-    for (const pet of pets) {
-      await registerPet.execute(pet)
-    }
+    const { id: orgId } = await orgsFactory.insert({
+      address: { city: 'Brasilia' },
+    })
 
     const filters = { age: 9, breed: 'German Shepherd', specie: Species.DOG }
     const nearbyPets = await sut.execute({

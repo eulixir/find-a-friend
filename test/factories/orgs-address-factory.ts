@@ -12,7 +12,7 @@ interface OrgAddressProps {
   complement?: string
 }
 
-export class OrgAddressFactory {
+export class OrgsAddressFactory {
   async getProps(props: OrgAddressProps) {
     return {
       country: props.country ?? faker.location.country(),

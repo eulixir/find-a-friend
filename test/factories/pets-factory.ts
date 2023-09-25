@@ -10,7 +10,7 @@ interface PetProps {
   age?: number
 }
 
-export class PetFactory {
+export class PetsFactory {
   async getProps(props: PetProps) {
     const { breed, name, species } = this.#generateSpecs(props)
 

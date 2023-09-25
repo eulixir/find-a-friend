@@ -3,23 +3,23 @@ import { RegisterOrgUseCase } from './register-org-use-case'
 import { InMemoryOrgsRepository } from '@/domain/repositories/in-memory/in-memory-orgs-repository'
 import { OrgAlredyExistsError } from '@/domain/use-cases/errors/orgAlreadyExists'
 import { InMemoryOrgsAddressesRepository } from '@/domain/repositories/in-memory/in-memory-orgs-addresses-repository'
-import { OrgFactory } from 'test/factories/org-factory'
+import { OrgsFactory } from 'test/factories/orgs-factory'
 
 let orgsRepository: InMemoryOrgsRepository
 let orgsAddressRepository: InMemoryOrgsAddressesRepository
-let orgFactory: OrgFactory
+let orgsFactory: OrgsFactory
 let sut: RegisterOrgUseCase
 
 describe('Register Org Use Case', () => {
   beforeEach(() => {
     orgsRepository = new InMemoryOrgsRepository()
     orgsAddressRepository = new InMemoryOrgsAddressesRepository()
-    orgFactory = new OrgFactory(orgsRepository, orgsAddressRepository, sut)
+    orgsFactory = new OrgsFactory(orgsRepository, orgsAddressRepository)
     sut = new RegisterOrgUseCase(orgsRepository, orgsAddressRepository)
   })
 
   it('should to register a org', async () => {
-    const orgParams = await orgFactory.getProps({})
+    const orgParams = await orgsFactory.getProps({})
 
     const { org } = await sut.execute(orgParams)
 
@@ -27,7 +27,7 @@ describe('Register Org Use Case', () => {
   })
 
   it('should not be able to register when email already registered', async () => {
-    const orgParams = await orgFactory.getProps({ email: 'email@email.com' })
+    const orgParams = await orgsFactory.getProps({ email: 'email@email.com' })
 
     await sut.execute(orgParams)
 

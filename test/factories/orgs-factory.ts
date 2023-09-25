@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { OrgAddressFactory } from './org-address-factory'
+import { OrgsAddressFactory } from './orgs-address-factory'
 import { OrgsAddressesRepository } from '@/domain/repositories/orgs-addressess-repository'
 import { OrgsRepository } from '@/domain/repositories/orgs-repository'
 import { RegisterOrgUseCase } from '@/domain/use-cases/orgs/register-org-use-case'
@@ -22,27 +22,26 @@ interface OrgProps {
   address?: OrgAddressProps
 }
 
-export class OrgFactory {
+export class OrgsFactory {
   constructor(
     private orgsRepository: OrgsRepository,
     private addressesRepository: OrgsAddressesRepository,
-    private registerOrgUseCase: RegisterOrgUseCase,
   ) {}
 
   async insert(props: OrgProps) {
-    this.registerOrgUseCase = new RegisterOrgUseCase(
+    const registerOrgUseCase = new RegisterOrgUseCase(
       this.orgsRepository,
       this.addressesRepository,
     )
     const orgParams = await this.getProps(props)
 
-    const { org } = await this.registerOrgUseCase.execute(orgParams)
+    const { org } = await registerOrgUseCase.execute(orgParams)
 
     return org
   }
 
   async getProps(props: OrgProps) {
-    const addressFactory = new OrgAddressFactory()
+    const addressFactory = new OrgsAddressFactory()
 
     const orgProps = {
       email: props.email ?? faker.internet.email(),
@@ -52,5 +51,11 @@ export class OrgFactory {
     }
 
     return orgProps
+  }
+
+  async insertMany(props: OrgProps, loops: number) {
+    for (let i = 0; i < loops; i++) {
+      this.insert(props)
+    }
   }
 }
