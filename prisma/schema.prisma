@@ -52,10 +52,11 @@ model OrgAddress {
 }
 
 model Customer {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  email     String   @unique
-  createdAt DateTime @default(now()) @map("created_at")
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
 
   @@map("customers")
 }
