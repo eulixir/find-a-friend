@@ -1,7 +1,7 @@
 import { Pet, Prisma } from '@prisma/client'
 import { ObjectId } from 'bson'
 
-import { PetsRepository } from '../pets-repository'
+import { PetsRepository, UpdateProps } from '../pets-repository'
 
 export class InMemoryPetsRepository implements PetsRepository {
   public items: Pet[] = []
@@ -27,5 +27,23 @@ export class InMemoryPetsRepository implements PetsRepository {
     const pets = this.items.filter((pet) => ids.includes(pet.orgId))
 
     return pets
+  }
+
+  async update(petId: string, data: UpdateProps) {
+    const petIndex = this.items.findIndex((item) => item.id === petId)
+
+    if (petIndex === -1) {
+      return null
+    }
+
+    const pet = this.items[petIndex]
+
+    this.items[petIndex] = {
+      ...pet,
+      name: data.name ?? pet.name,
+      customerId: data.customerId ?? pet.customerId,
+    }
+
+    return this.items[petIndex]
   }
 }
