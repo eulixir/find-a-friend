@@ -2,7 +2,7 @@ import { expect, describe, it, beforeEach } from 'vitest'
 import { RegisterCustomerUseCase } from './register-customer-use-case'
 import { InMemoryCustomersRepository } from '@/domain/repositories/in-memory/in-memory-customers-repository'
 import { CustomersFactory } from 'test/factories/customers-factory'
-import { CustomerAlreadyExistsError } from '../errors/customerAlreadyExists'
+import { CustomerAlreadyExistsError } from '../@errors/customerAlreadyExists'
 
 let customersRepository: InMemoryCustomersRepository
 let customersFactory: CustomersFactory

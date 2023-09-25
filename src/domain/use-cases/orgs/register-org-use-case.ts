@@ -1,4 +1,4 @@
-import { OrgAlredyExistsError } from '@/domain/use-cases/errors/orgAlreadyExists'
+import { OrgAlredyExistsError } from '@/domain/use-cases/@errors/orgAlreadyExists'
 import { OrgsRepository } from '@/domain/repositories/orgs-repository'
 import { Org } from '@prisma/client'
 import { InsertAddressUseCase } from '../addresses/insert-address-use-case'

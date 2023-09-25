@@ -1,6 +1,6 @@
 import { CustomersRepository } from '@/domain/repositories/customers-repository'
 import { hash } from 'bcryptjs'
-import { CustomerAlreadyExistsError } from '../errors/customerAlreadyExists'
+import { CustomerAlreadyExistsError } from '../@errors/customerAlreadyExists'
 
 interface RegisterCustomerUseCaseRequest {
   name: string

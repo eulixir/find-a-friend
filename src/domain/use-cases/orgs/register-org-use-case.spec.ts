@@ -1,7 +1,7 @@
 import { expect, describe, it, beforeEach } from 'vitest'
 import { RegisterOrgUseCase } from './register-org-use-case'
 import { InMemoryOrgsRepository } from '@/domain/repositories/in-memory/in-memory-orgs-repository'
-import { OrgAlredyExistsError } from '@/domain/use-cases/errors/orgAlreadyExists'
+import { OrgAlredyExistsError } from '@/domain/use-cases/@errors/orgAlreadyExists'
 import { InMemoryOrgsAddressesRepository } from '@/domain/repositories/in-memory/in-memory-orgs-addresses-repository'
 import { OrgsFactory } from 'test/factories/orgs-factory'
 

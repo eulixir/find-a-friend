@@ -1,5 +1,5 @@
 import { CustomersRepository } from '@/domain/repositories/customers-repository'
-import { RegisterCustomerUseCase } from '@/domain/use-cases/customer/register-customer-use-case'
+import { RegisterCustomerUseCase } from '@/domain/use-cases/customers/register-customer-use-case'
 import { faker } from '@faker-js/faker'
 
 interface CustomerProps {
