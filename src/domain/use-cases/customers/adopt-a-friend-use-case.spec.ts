@@ -5,7 +5,7 @@ import { CustomersFactory } from 'test/factories/customers-factory'
 import { InMemoryCustomersRepository } from '@/domain/repositories/in-memory/in-memory-customers-repository'
 import { AdoptAFriendUseCase } from './adopt-a-friend-use-case'
 import { randomUUID } from 'crypto'
-import { PetIdNotExistError } from '../@errors/petIdNotExist'
+import { PetIdNotExistsError } from '../@errors/petIdNotExists'
 
 let petsRepository: InMemoryPetsRepository
 let petsFactory: PetsFactory
@@ -33,13 +33,13 @@ describe(' Use Case', () => {
     expect(pet.customerId).toEqual(customerId)
   })
 
-  it('should bot be able to find a friend when pet id does not exist', async () => {
+  it('should bot be able to find a friend when pet id does not exists', async () => {
     const { id: customerId } = await customerFactory.insert({})
 
     const randomPetId = randomUUID()
 
     await expect(() =>
       sut.execute({ customerId, petId: randomPetId }),
-    ).rejects.toBeInstanceOf(PetIdNotExistError)
+    ).rejects.toBeInstanceOf(PetIdNotExistsError)
   })
 })

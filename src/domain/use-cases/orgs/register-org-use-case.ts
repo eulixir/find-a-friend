@@ -4,6 +4,7 @@ import { Org } from '@prisma/client'
 import { InsertAddressUseCase } from '../addresses/insert-address-use-case'
 import { OrgsAddressesRepository } from '@/domain/repositories/orgs-addressess-repository'
 import { ObjectId } from 'bson'
+import { hash } from 'bcryptjs'
 
 interface OrgAddressProps {
   country: string
@@ -19,6 +20,7 @@ interface OrgAddressProps {
 interface RegisterOrgUseCaseRequest {
   email: string
   phoneNumber: string
+  password: string
   name: string
   address: OrgAddressProps
 }
@@ -37,8 +39,11 @@ export class RegisterOrgUseCase {
     address,
     email,
     name,
+    password,
     phoneNumber,
   }: RegisterOrgUseCaseRequest): Promise<RegisterOrgUseCaseResponse> {
+    const passwordHash = await hash(password, 6)
+
     const orgWithEmail = await this.orgsRepository.findByEmail(email)
 
     if (orgWithEmail) {
@@ -63,6 +68,7 @@ export class RegisterOrgUseCase {
       name,
       phoneNumber,
       orgAddressId,
+      passwordHash,
     })
 
     return { org }

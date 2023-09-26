@@ -1,6 +1,6 @@
 import { PetsRepository } from '@/domain/repositories/pets-repository'
 import { Pet } from '@prisma/client'
-import { PetIdNotExistError } from '../@errors/petIdNotExist'
+import { PetIdNotExistsError } from '../@errors/petIdNotExists'
 
 interface AdoptAFriendUseCaseRequest {
   customerId: string
@@ -23,7 +23,7 @@ export class AdoptAFriendUseCase {
     })
 
     if (!pet) {
-      throw new PetIdNotExistError()
+      throw new PetIdNotExistsError()
     }
 
     return { pet }

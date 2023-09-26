@@ -17,6 +17,7 @@ interface OrgAddressProps {
 
 interface OrgProps {
   email?: string
+  password?: string
   phoneNumber?: string
   name?: string
   address?: OrgAddressProps
@@ -45,6 +46,7 @@ export class OrgsFactory {
 
     const orgProps = {
       email: props.email ?? faker.internet.email(),
+      password: props.password ?? faker.internet.password(),
       phoneNumber: props.phoneNumber ?? faker.phone.number(),
       name: props.name ?? faker.company.name(),
       address: await addressFactory.getProps(props.address ?? {}),

@@ -1,6 +1,6 @@
 import { DomainError } from './domainError'
 
-export class PetIdNotExistError extends DomainError {
+export class PetIdNotExistsError extends DomainError {
   constructor() {
     super('PetId not found', 404)
   }

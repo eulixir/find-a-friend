@@ -12,6 +12,7 @@ export class InMemoryOrgsRepository implements OrgsRepository {
       email: data.email,
       orgAddressId: data.orgAddressId,
       phoneNumber: data.phoneNumber,
+      passwordHash: data.passwordHash,
 
       createdAt: new Date(),
     }

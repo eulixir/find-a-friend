@@ -31,6 +31,7 @@ model Org {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   name         String
   email        String   @unique
+  passwordHash String   @map("password_hash")
   phoneNumber  String   @map("phone_number")
   createdAt    DateTime @default(now()) @map("created_at")
   orgAddressId String   @map("org_address_id")
