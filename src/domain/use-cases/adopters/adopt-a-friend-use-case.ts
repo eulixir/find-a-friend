@@ -3,7 +3,7 @@ import { Pet } from '@prisma/client'
 import { PetIdNotExistsError } from '../@errors/petIdNotExists'
 
 interface AdoptAFriendUseCaseRequest {
-  customerId: string
+  adopterId: string
   petId: string
 }
 
@@ -15,11 +15,11 @@ export class AdoptAFriendUseCase {
   constructor(private petsRepository: PetsRepository) {}
 
   async execute({
-    customerId,
+    adopterId,
     petId,
   }: AdoptAFriendUseCaseRequest): Promise<AdoptAFriendUseCaseResponse> {
     const pet = await this.petsRepository.update(petId, {
-      customerId,
+      adopterId,
     })
 
     if (!pet) {

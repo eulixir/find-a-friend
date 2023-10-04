@@ -13,7 +13,7 @@ export class InMemoryPetsRepository implements PetsRepository {
       breed: data.breed,
       orgId: data.orgId,
       age: data.age,
-      customerId: data.customerId ?? null,
+      adopterId: data.adopterId ?? null,
       species: data.species,
       createdAt: new Date(),
     }
@@ -41,7 +41,7 @@ export class InMemoryPetsRepository implements PetsRepository {
     this.items[petIndex] = {
       ...pet,
       name: data.name ?? pet.name,
-      customerId: data.customerId ?? pet.customerId,
+      adopterId: data.adopterId ?? pet.adopterId,
     }
 
     return this.items[petIndex]

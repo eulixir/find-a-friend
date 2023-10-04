@@ -1,6 +1,6 @@
 import { Pet, Prisma } from '@prisma/client'
 export interface UpdateProps {
-  customerId?: string
+  adopterId?: string
   name?: string
 }
 export interface PetsRepository {

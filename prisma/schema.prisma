@@ -15,14 +15,14 @@ enum Species {
 }
 
 model Pet {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  name       String?
-  species    Species
-  breed      String
-  orgId      String   @map("org_id")
-  age        Int
-  createdAt  DateTime @default(now()) @map("created_at")
-  customerId String?  @map("customer_id")
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String?
+  species   Species
+  breed     String
+  orgId     String   @map("org_id")
+  age       Int
+  createdAt DateTime @default(now()) @map("created_at")
+  adopterId String?  @map("adopter_id")
 
   @@map("pets")
 }
@@ -52,12 +52,12 @@ model OrgAddress {
   orgId        String  @map("org_id") @db.ObjectId
 }
 
-model Customer {
+model Adopter {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   name         String
   email        String   @unique
   passwordHash String   @map("password_hash")
   createdAt    DateTime @default(now()) @map("created_at")
 
-  @@map("customers")
+  @@map("adopters")
 }
