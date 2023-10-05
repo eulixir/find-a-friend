@@ -37,4 +37,14 @@ export class InMemoryOrgsRepository implements OrgsRepository {
 
     return orgs
   }
+
+  async findById(id: string): Promise<Org | null> {
+    const org = this.items.find((org) => org.id === id)
+
+    if (!org) {
+      return null
+    }
+
+    return org
+  }
 }

@@ -1,16 +1,16 @@
-import { InMemoryOrgsRepository } from '@/domain/repositories/in-memory/in-memory-orgs-repository'
 import { DomainError } from '@/domain/use-cases/@errors/domainError'
 import { OrgLoginUseCase } from '@/domain/use-cases/login/org-login-use-case'
+import { PrismaOrgsRepository } from '@/infra/database/repositories/prisma-orgs-repository'
 import { FastifyReply, FastifyRequest } from 'fastify'
 
 import { z } from 'zod'
 export async function orgLogin(request: FastifyRequest, reply: FastifyReply) {
   const { email, password } = authenticateSchema(request)
 
-  const inMemmoryRepository = new InMemoryOrgsRepository()
+  const orgsRepository = new PrismaOrgsRepository()
 
   try {
-    const orgLoginUseCase = new OrgLoginUseCase(inMemmoryRepository)
+    const orgLoginUseCase = new OrgLoginUseCase(orgsRepository)
 
     await orgLoginUseCase.execute({
       email,
