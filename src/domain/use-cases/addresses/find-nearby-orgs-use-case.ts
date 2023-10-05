@@ -21,7 +21,7 @@ export class FindNearbyOrgsUseCase {
   }: FindNearbyOrgsUseCaseRequest): Promise<FindNearbyOrgsUseCaseResponse> {
     const orgsIds = await this.addressesRepository.findOrgsIdByCity(city)
 
-    const orgs = await this.orgsRepository.findManyByIds(orgsIds)
+    const orgs = await this.orgsRepository.findManyByAddressIds(orgsIds)
 
     return { orgs }
   }

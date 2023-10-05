@@ -32,7 +32,7 @@ export class InMemoryOrgsRepository implements OrgsRepository {
     return org
   }
 
-  async findManyByIds(ids: string[]) {
+  async findManyByAddressIds(ids: string[]) {
     const orgs = this.items.filter((org) => ids.includes(org.id))
 
     return orgs
@@ -46,5 +46,11 @@ export class InMemoryOrgsRepository implements OrgsRepository {
     }
 
     return org
+  }
+
+  async listAll(): Promise<Org[]> {
+    const orgs = this.items
+
+    return orgs
   }
 }

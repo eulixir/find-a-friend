@@ -6,6 +6,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { createOrgBodySchema } from '../dtos/create-org-dto'
 import { z } from 'zod'
 import { FindOrgUseCase } from '@/domain/use-cases/orgs/find-org-use-case'
+import { FindAllOrgsUseCase } from '@/domain/use-cases/orgs/find-many-orgs-use-case'
 
 export async function createOrgController(
   request: FastifyRequest,
@@ -62,4 +63,17 @@ export async function getByIdOrgController(
 
     throw err
   }
+}
+
+export async function listAllOrgsController(
+  _: FastifyRequest,
+  reply: FastifyReply,
+) {
+  const orgRepository = new PrismaOrgsRepository()
+
+  const findAllOrgs = new FindAllOrgsUseCase(orgRepository)
+
+  const { orgs } = await findAllOrgs.execute()
+
+  return reply.status(200).send({ orgs })
 }

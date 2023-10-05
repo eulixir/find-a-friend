@@ -3,20 +3,16 @@ import { RegisterPetUseCase } from '@/domain/use-cases/pets/register-pet-use-cas
 import { PrismaPetsRepository } from '@/infra/database/repositories/prisma-pets-repository '
 import { FastifyReply, FastifyRequest } from 'fastify'
 
-import { z } from 'zod'
+import { createPetBodySchema, findAFriendBodySchema } from '../dtos/pet-dto'
+import { FindAPetUseCase } from '@/domain/use-cases/pets/find-a-pet-use-case'
+import { FindNearbyOrgsUseCase } from '@/domain/use-cases/addresses/find-nearby-orgs-use-case'
+import { PrismaAddressRepository } from '@/infra/database/repositories/prisma-address-repository'
+import { PrismaOrgsRepository } from '@/infra/database/repositories/prisma-orgs-repository'
 
 export async function createPetController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const createPetBodySchema = z.object({
-    name: z.string().optional(),
-    species: z.enum(['CAT', 'DOG', 'BIRD', 'SNAKE']),
-    breed: z.string(),
-    orgId: z.string(),
-    age: z.number(),
-  })
-
   const attrs = createPetBodySchema.parse(request.body)
 
   const petsRepository = new PrismaPetsRepository()
@@ -24,9 +20,11 @@ export async function createPetController(
   try {
     const registerPetCase = new RegisterPetUseCase(petsRepository)
 
-    await registerPetCase.execute({
+    const pet = await registerPetCase.execute({
       ...attrs,
     })
+
+    return reply.status(201).send(pet)
   } catch (err) {
     if (err instanceof DomainError) {
       return reply.status(err.status).send({ message: err.message })
@@ -34,6 +32,33 @@ export async function createPetController(
 
     throw err
   }
+}
 
-  return reply.status(200).send()
+export async function findAFriendController(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
+  const petsRepository = new PrismaPetsRepository()
+  const addressRepository = new PrismaAddressRepository()
+  const orgsRepository = new PrismaOrgsRepository()
+
+  const findNeasrbyOrgs = new FindNearbyOrgsUseCase(
+    addressRepository,
+    orgsRepository,
+  )
+  const attrs = findAFriendBodySchema.parse(request.body)
+
+  try {
+    const findAFriend = new FindAPetUseCase(petsRepository, findNeasrbyOrgs)
+
+    const pets = await findAFriend.execute(attrs)
+
+    return reply.status(200).send(pets)
+  } catch (err) {
+    if (err instanceof DomainError) {
+      return reply.status(err.status).send({ message: err.message })
+    }
+
+    throw err
+  }
 }

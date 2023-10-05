@@ -24,10 +24,10 @@ export class PrismaOrgsRepository implements OrgsRepository {
     return org
   }
 
-  findManyByIds(ids: string[]): Promise<Org[] | []> {
-    const orgs = prisma.org.findMany({
+  async findManyByAddressIds(ids: string[]): Promise<Org[] | []> {
+    const orgs = await prisma.org.findMany({
       where: {
-        id: { in: ids },
+        orgAddressId: { in: ids },
       },
     })
 
@@ -35,7 +35,7 @@ export class PrismaOrgsRepository implements OrgsRepository {
   }
 
   async findById(id: string): Promise<Org | null> {
-    const org = prisma.org.findUnique({
+    const org = await prisma.org.findUnique({
       where: { id },
     })
 
@@ -44,5 +44,11 @@ export class PrismaOrgsRepository implements OrgsRepository {
     }
 
     return org
+  }
+
+  async listAll() {
+    const orgs = await prisma.org.findMany()
+
+    return orgs
   }
 }
