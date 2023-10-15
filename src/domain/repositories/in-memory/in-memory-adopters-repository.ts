@@ -29,4 +29,14 @@ export class InMemoryAdoptersRepository implements AdoptersRepository {
 
     return adopter
   }
+
+  async findById(id: string): Promise<Adopter | null> {
+    const adopter = this.items.find((item) => item.id === id)
+
+    if (!adopter) {
+      return null
+    }
+
+    return adopter
+  }
 }

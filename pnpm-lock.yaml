@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@fastify/cookie':
+    specifier: ^9.1.0
+    version: 9.1.0
   '@fastify/jwt':
     specifier: ^7.2.1
     version: 7.2.1
@@ -366,6 +369,13 @@ packages:
       fast-uri: 2.2.0
     dev: false
 
+  /@fastify/cookie@9.1.0:
+    resolution: {integrity: sha512-w/LlQjj7cmYlQNhEKNm4jQoLkFXCL73kFu1Jy3aL7IFbYEojEKur0f7ieCKUxBBaU65tpaWC83UM8xW7AzY6uw==}
+    dependencies:
+      cookie: 0.5.0
+      fastify-plugin: 4.5.1
+    dev: false
+
   /@fastify/deepmerge@1.3.0:
     resolution: {integrity: sha512-J8TOSBq3SoZbDhM9+R/u77hP93gz/rajSA+K2kGyijPpORPWUXHUpTaleoj+92As0S9uPRP7Oi8IqMf0u+ro6A==}
     dev: false
@@ -385,7 +395,7 @@ packages:
     dependencies:
       '@fastify/error': 3.3.0
       '@lukeed/ms': 2.0.1
-      fast-jwt: 3.3.0
+      fast-jwt: 3.3.1
       fastify-plugin: 4.5.1
       steed: 1.1.3
     dev: false
@@ -1940,8 +1950,8 @@ packages:
       rfdc: 1.3.0
     dev: false
 
-  /fast-jwt@3.3.0:
-    resolution: {integrity: sha512-tN33BAxlfnMrStYTvHwnoCoTZj9e7sGWfWGg/Naluxe6I5IsF7J2UwEjCJvJ7YD6fyAUo0WWd+OrBIFAmfZPrw==}
+  /fast-jwt@3.3.1:
+    resolution: {integrity: sha512-1YuuIJeh1hEvfcYDe89P2oGACWI5hd2GadRDKHalSxkc1Z0z8I6yzuVK6SF15sW09QZngTV6d7g4+TFL9bvs5A==}
     engines: {node: '>=16 <22'}
     dependencies:
       '@lukeed/ms': 2.0.1

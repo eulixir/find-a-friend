@@ -1,15 +1,28 @@
 import fastify from 'fastify'
 import { ZodError } from 'zod'
 import { env } from '@/env'
-import jwt from '@fastify/jwt'
+import { fastifyJwt } from '@fastify/jwt'
 import { appRoutes } from './infra/http/controllers/routes'
-
+import cookie from '@fastify/cookie'
 export const app = fastify()
+
+app.register(cookie, {
+  secret: 'my-secret', // for cookies signature
+  hook: 'onRequest', // set to false to disable cookie autoparsing or set autoparsing on any of the following hooks: 'onRequest', 'preParsing', 'preHandler', 'preValidation'. default: 'onRequest'
+  parseOptions: {}, // options for parsing cookies
+})
 
 app.register(appRoutes)
 
-app.register(jwt, {
-  secret: 'supersecret',
+app.register(fastifyJwt, {
+  secret: 'banana',
+  cookie: {
+    cookieName: 'refreshToken',
+    signed: false,
+  },
+  sign: {
+    expiresIn: '10m',
+  },
 })
 
 app.setErrorHandler((error, _, reply) => {

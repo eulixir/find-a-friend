@@ -33,6 +33,8 @@ export class FindAPetUseCase {
 
     const nearbyPets = await this.petsRepository.findManyByOrgsIds(orgsId)
 
+    console.log(nearbyPets)
+
     const pets = await this.#filterPets(nearbyPets, filters)
 
     return { pets }

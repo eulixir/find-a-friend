@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { createAddressSchema } from './create-address-dto'
+import { createAddressSchema } from './address-dto'
 
 export const createOrgBodySchema = z.object({
   email: z.string().email(),

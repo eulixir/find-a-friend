@@ -3,7 +3,7 @@ import { RegisterOrgUseCase } from '@/domain/use-cases/orgs/register-org-use-cas
 import { PrismaAddressRepository } from '@/infra/database/repositories/prisma-address-repository'
 import { PrismaOrgsRepository } from '@/infra/database/repositories/prisma-orgs-repository'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { createOrgBodySchema } from '../dtos/create-org-dto'
+import { createOrgBodySchema } from '../dtos/org-dto'
 import { z } from 'zod'
 import { FindOrgUseCase } from '@/domain/use-cases/orgs/find-org-use-case'
 import { FindAllOrgsUseCase } from '@/domain/use-cases/orgs/find-many-orgs-use-case'
