@@ -12,12 +12,12 @@ export class AdoptersFactory {
   constructor(private adoptersRepository: AdoptersRepository) {}
 
   async insert(props: AdopterProps) {
-    const registerPetUseCase = new RegisterAdopterUseCase(
+    const registerAdopterUseCase = new RegisterAdopterUseCase(
       this.adoptersRepository,
     )
     const adopterParams = await this.getProps(props)
 
-    const { adopter } = await registerPetUseCase.execute(adopterParams)
+    const { adopter } = await registerAdopterUseCase.execute(adopterParams)
 
     return adopter
   }

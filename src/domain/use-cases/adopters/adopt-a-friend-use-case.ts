@@ -30,9 +30,7 @@ export class AdoptAFriendUseCase {
       throw new AdopterNotExistsError()
     }
 
-    const pet = await this.petsRepository.update(petId, {
-      adopterId,
-    })
+    const pet = await this.petsRepository.findById(petId)
 
     if (!pet) {
       throw new PetIdNotExistsError()
@@ -42,6 +40,14 @@ export class AdoptAFriendUseCase {
       throw new PetAlreadyAdoptedError()
     }
 
-    return { pet }
+    const updatedPet = await this.petsRepository.update(petId, {
+      adopterId,
+    })
+
+    if (!updatedPet) {
+      throw new PetIdNotExistsError()
+    }
+
+    return { pet: updatedPet }
   }
 }

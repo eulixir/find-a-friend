@@ -14,6 +14,7 @@ interface RegisterAdopterUseCaseResponse {
     name: string
     email: string
     createdAt: Date
+    passwordHash: string
   }
 }
 

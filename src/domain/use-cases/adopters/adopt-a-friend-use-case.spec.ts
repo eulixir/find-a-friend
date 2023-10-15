@@ -6,6 +6,8 @@ import { InMemoryAdoptersRepository } from '@/domain/repositories/in-memory/in-m
 import { AdoptAFriendUseCase } from './adopt-a-friend-use-case'
 import { randomUUID } from 'crypto'
 import { PetIdNotExistsError } from '../@errors/petIdNotExists'
+import { PetAlreadyAdoptedError } from '../@errors/petAlreadyAdopted'
+import { AdopterNotExistsError } from '../@errors/adopterNotExists'
 
 let petsRepository: InMemoryPetsRepository
 let petsFactory: PetsFactory
@@ -14,16 +16,16 @@ let adopterFactory: AdoptersFactory
 
 let sut: AdoptAFriendUseCase
 
-describe(' Use Case', () => {
+describe('Adopt a friend Use Case', () => {
   beforeEach(() => {
     petsRepository = new InMemoryPetsRepository()
     petsFactory = new PetsFactory(petsRepository)
     adoptersRepository = new InMemoryAdoptersRepository()
     adopterFactory = new AdoptersFactory(adoptersRepository)
-    sut = new AdoptAFriendUseCase(petsRepository)
+    sut = new AdoptAFriendUseCase(adoptersRepository, petsRepository)
   })
 
-  it('should be able to find a friend when have a match with filters', async () => {
+  it('should be able to adopt a friend', async () => {
     const { id: adopterId } = await adopterFactory.insert({})
 
     const { id: petId } = await petsFactory.insert({})
@@ -33,7 +35,7 @@ describe(' Use Case', () => {
     expect(pet.adopterId).toEqual(adopterId)
   })
 
-  it('should bot be able to find a friend when pet id does not exists', async () => {
+  it('should not be able to adopt a friend when pet id does not exists', async () => {
     const { id: adopterId } = await adopterFactory.insert({})
 
     const randomPetId = randomUUID()
@@ -41,5 +43,26 @@ describe(' Use Case', () => {
     await expect(() =>
       sut.execute({ adopterId, petId: randomPetId }),
     ).rejects.toBeInstanceOf(PetIdNotExistsError)
+  })
+
+  it('should not be able to adopt a friend when pet already adopted', async () => {
+    const { id: adopterId } = await adopterFactory.insert({})
+
+    const { id: petId } = await petsFactory.insert({})
+    await sut.execute({ adopterId, petId })
+
+    await expect(() =>
+      sut.execute({ adopterId, petId }),
+    ).rejects.toBeInstanceOf(PetAlreadyAdoptedError)
+  })
+
+  it('should not be able to adopt a friend when adopter id does not exist', async () => {
+    const adopterId = randomUUID()
+
+    const petId = randomUUID()
+
+    await expect(() =>
+      sut.execute({ adopterId, petId }),
+    ).rejects.toBeInstanceOf(AdopterNotExistsError)
   })
 })
