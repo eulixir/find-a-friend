@@ -44,10 +44,6 @@ export class AdoptAFriendUseCase {
       adopterId,
     })
 
-    if (!updatedPet) {
-      throw new PetIdNotExistsError()
-    }
-
     return { pet: updatedPet }
   }
 }

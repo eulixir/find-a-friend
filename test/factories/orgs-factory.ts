@@ -57,7 +57,7 @@ export class OrgsFactory {
 
   async insertMany(props: OrgProps, loops: number) {
     for (let i = 0; i < loops; i++) {
-      this.insert(props)
+      await this.insert(props)
     }
   }
 }

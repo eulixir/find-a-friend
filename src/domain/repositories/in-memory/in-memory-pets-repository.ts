@@ -32,10 +32,6 @@ export class InMemoryPetsRepository implements PetsRepository {
   async update(petId: string, data: UpdateProps) {
     const petIndex = this.items.findIndex((item) => item.id === petId)
 
-    if (petIndex === -1) {
-      return null
-    }
-
     const pet = this.items[petIndex]
 
     this.items[petIndex] = {

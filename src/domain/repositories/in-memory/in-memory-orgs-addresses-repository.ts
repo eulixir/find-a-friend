@@ -11,11 +11,11 @@ export class InMemoryOrgsAddressesRepository
     const address = {
       id: data.id ?? new ObjectId().toString(),
       city: data.city,
-      complement: data.complement ?? null,
+      complement: data.complement ?? '',
       country: data.country,
       orgId: data.orgId,
       neighborhood: data.neighborhood,
-      number: data.number ?? null,
+      number: data.number ?? '',
       state: data.state,
       street: data.street,
       zipCode: data.zipCode,
