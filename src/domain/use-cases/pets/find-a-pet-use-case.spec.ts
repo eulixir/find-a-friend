@@ -31,7 +31,7 @@ describe('Find a Pet Use Case', () => {
     sut = new FindAPetUseCase(petsRepository, findNearbyOrgs)
   })
 
-  it('should be able to find a frind when have a match with filters', async () => {
+  it('should be able to find a frind when matches with filters', async () => {
     await orgsFactory.insertMany({}, 20)
 
     const { id: orgId } = await orgsFactory.insert({

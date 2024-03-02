@@ -1,63 +1,63 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
 }
 
 enum Species {
-  DOG
-  CAT
-  BIRD
-  SNAKE
+    DOG
+    CAT
+    BIRD
+    SNAKE
 }
 
 model Pet {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String?
-  species   Species
-  breed     String
-  orgId     String   @map("org_id")
-  age       Int
-  createdAt DateTime @default(now()) @map("created_at")
-  adopterId String?  @map("adopter_id")
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    name      String?
+    species   Species
+    breed     String
+    orgId     String   @map("org_id")
+    age       Int
+    createdAt DateTime @default(now()) @map("created_at")
+    adopterId String?  @map("adopter_id")
 
-  @@map("pets")
+    @@map("pets")
 }
 
 model Org {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
-  email        String   @unique
-  passwordHash String   @map("password_hash")
-  phoneNumber  String   @map("phone_number")
-  createdAt    DateTime @default(now()) @map("created_at")
-  orgAddressId String   @map("org_address_id")
+    id           String   @id @default(auto()) @map("_id") @db.ObjectId
+    name         String
+    email        String   @unique
+    passwordHash String   @map("password_hash")
+    phoneNumber  String   @map("phone_number")
+    createdAt    DateTime @default(now()) @map("created_at")
+    orgAddressId String   @map("org_address_id")
 
-  @@map("orgs")
+    @@map("orgs")
 }
 
 model OrgAddress {
-  id           String  @id @default(auto()) @map("_id") @db.ObjectId
-  country      String
-  zipCode      String  @map("zip_code")
-  state        String
-  city         String
-  neighborhood String
-  street       String
-  number       String?
-  complement   String?
-  orgId        String  @map("org_id") @db.ObjectId
+    id           String  @id @default(auto()) @map("_id") @db.ObjectId
+    country      String
+    zipCode      String  @map("zip_code")
+    state        String
+    city         String
+    neighborhood String
+    street       String
+    number       String?
+    complement   String?
+    orgId        String  @map("org_id") @db.ObjectId
 }
 
 model Adopter {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
-  email        String   @unique
-  passwordHash String   @map("password_hash")
-  createdAt    DateTime @default(now()) @map("created_at")
+    id           String   @id @default(auto()) @map("_id") @db.ObjectId
+    name         String
+    email        String   @unique
+    passwordHash String   @map("password_hash")
+    createdAt    DateTime @default(now()) @map("created_at")
 
-  @@map("adopters")
+    @@map("adopters")
 }
